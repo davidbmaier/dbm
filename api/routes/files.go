@@ -13,7 +13,10 @@ func GetFile(c *fiber.Ctx, env map[string]string) error {
 
 	_, err := os.Open(path)
 	if err != nil {
-		return c.SendStatus(404)
+		c.Set("Content-Type", "application/json")
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Not found",
+		})
 	}
 
 	return c.SendFile(path)

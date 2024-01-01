@@ -7,6 +7,7 @@ import (
 	database "github.com/davidbmaier/dbm/db"
 	"github.com/davidbmaier/dbm/routes"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 
@@ -41,13 +42,25 @@ func main() {
 		TimeZone:   "Europe/Berlin",
 	}))
 
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "http://localhost:5173",
+		AllowCredentials: true,
+	}))
+
 	apiRouter := app.Group("/api")
 	// Login route
 	apiRouter.Post("/login", func(c *fiber.Ctx) error { return routes.Login(c, env) })
 
 	// JWT Middleware
 	app.Use(jwtware.New(jwtware.Config{
-		SigningKey: jwtware.SigningKey{Key: []byte(env["JWT_SECRET"])},
+		SigningKey:  jwtware.SigningKey{Key: []byte(env["JWT_SECRET"])},
+		TokenLookup: "cookie:token",
+		ErrorHandler: func(c *fiber.Ctx, err error) error {
+			c.Set("Content-Type", "application/json")
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"error": "Unauthorized",
+			})
+		},
 	}))
 
 	worksRouter := apiRouter.Group("/works")
