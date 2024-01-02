@@ -1,0 +1,10 @@
+{
+	"layout.title": "Database Maier",
+	"login.email": "Email address",
+	"login.password": "Password",
+	"login.login": "Log in",
+	"works.nodata": "No artworks found...",
+	"works.search.placeholder": "Search for an artwork...",
+	"worktile.artist.fallback": "Unknown artist",
+	"worktile.name.fallback": "Unknown artwork"
+}

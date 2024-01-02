@@ -1,0 +1,10 @@
+{
+	"layout.title": "Datenbank Maier",
+	"login.email": "E-Mail-Adresse",
+	"login.password": "Passwort",
+	"login.login": "Einloggen",
+	"works.nodata": "Keine Kunstwerke gefunden...",
+	"works.search.placeholder": "Suche nach einem Kunstwerk...",
+	"worktile.artist.fallback": "Unbekannte/r Künstler/in",
+	"worktile.name.fallback": "Unbekanntes Kunstwerk"
+}

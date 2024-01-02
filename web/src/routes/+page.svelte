@@ -1,4 +1,6 @@
 <script>
+    import { Input, Button } from 'flowbite-svelte'
+    import { _ } from 'svelte-i18n';
 	import { login } from "$lib/requests";
 
     let email = "";
@@ -12,15 +14,15 @@
 </script>
 
 <div>
-    E-Mail
-    <input bind:value={email} />
+    {$_("login.email")}
+    <Input bind:value={email} />
 </div>
 <div>
-    Passwort
-    <input bind:value={password} />
+    {$_("login.password")}
+    <Input bind:value={password} />
 </div>
 <div>
-    <button on:click={performLogin}>Einloggen</button>
+    <Button on:click={performLogin}>{$_("login.login")}</Button>
 </div>
 <div>
     {error}

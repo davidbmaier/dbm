@@ -29,7 +29,7 @@ func InitDatabaseConnection(envMap map[string]string) *gorm.DB {
 }
 
 func RetrieveArtists(search string, page int) types.ArtistsResponse {
-	pageSize := 50
+	pageSize := 20
 	offset := (page - 1) * pageSize
 
 	var artists []types.Artist
@@ -51,7 +51,7 @@ func RetrieveArtist(artistID int) types.Artist {
 }
 
 func RetrieveWorks(search string, artistID int, page int) types.WorksResponse {
-	pageSize := 50
+	pageSize := 20
 	offset := (page - 1) * pageSize
 
 	var works []types.Work
