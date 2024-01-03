@@ -3,6 +3,7 @@ module github.com/davidbmaier/dbm
 go 1.21.4
 
 require (
+	github.com/dlclark/regexp2 v1.10.0
 	github.com/gofiber/contrib/jwt v1.0.8
 	github.com/gofiber/fiber/v2 v2.51.0
 	github.com/golang-jwt/jwt/v5 v5.2.0

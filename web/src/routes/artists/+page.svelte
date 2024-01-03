@@ -1,29 +1,172 @@
 <script lang="ts">
-	import { getArtists, isErrorResponse } from "$lib/requests";
-    import type {ArtistsResponse, ErrorResponse} from "../../types"
+	import { getArtists, isErrorResponse } from '$lib/requests';
+	import {
+		Input,
+		Pagination,
+		Table,
+		TableBody,
+		TableBodyCell,
+		TableBodyRow,
+		TableHead,
+		TableHeadCell
+	} from 'flowbite-svelte';
+	import type { ArtistsResponse, ErrorResponse } from '../../types';
+	import { _ } from 'svelte-i18n';
+	import { debounce, getStorage, updateStorage, type storageEntry } from '$lib/util';
+	import { ChevronLeftOutline, ChevronRightOutline } from 'flowbite-svelte-icons';
+	import Error from '$lib/components/Error.svelte';
 
-    export let page = 1;
-    export let search = "";
+	const pageStorageID = `artistsPage`;
+	const searchStorageID = `artistsSearch`;
 
-    let artistsData: ArtistsResponse;
-    let error: ErrorResponse;
+	export let page = 1;
+	export let search = '';
 
-    const fetchArtistsData = async () => {
-        const fetchedData = await getArtists(search, page);
-        if (isErrorResponse(fetchedData)) {
-            error = fetchedData;
-        } else {
-            artistsData = fetchedData as ArtistsResponse;
-        }
-    }
+	// get values from last visit
+	const storedValues: storageEntry = getStorage([pageStorageID, searchStorageID]);
+	if (storedValues[pageStorageID]) {
+		page = Number(storedValues[pageStorageID]);
+	}
+	if (storedValues[searchStorageID]) {
+		search = storedValues[searchStorageID];
+	}
 
-    fetchArtistsData();
+	let pages = [{ name: '1' }];
+	let maxPage = 1;
+	let loading = true;
+
+	let artistsData: ArtistsResponse;
+	let error: ErrorResponse;
+
+	const updatePages = () => {
+		if (artistsData.artists.length > 0) {
+			maxPage = artistsData.total / artistsData.artists.length;
+
+			const tempPages = [];
+			if (page - 2 > 0) {
+				tempPages.push({ name: `${Number(page) - 2}` });
+			}
+			if (page - 1 > 0) {
+				tempPages.push({ name: `${Number(page) - 1}` });
+			}
+			tempPages.push({ name: `${Number(page)}`, active: true });
+			if (page + 1 <= maxPage) {
+				tempPages.push({ name: `${Number(page) + 1}` });
+			}
+			if (page + 2 <= maxPage) {
+				tempPages.push({ name: `${Number(page) + 2}` });
+			}
+			pages = tempPages;
+		} else {
+			page = 1;
+			pages = [{ name: '1' }];
+		}
+	};
+
+	const fetchArtistsData = async () => {
+		loading = true;
+		const fetchedData = await getArtists(search, page);
+		loading = false;
+		if (isErrorResponse(fetchedData)) {
+			error = fetchedData;
+		} else {
+			artistsData = fetchedData as ArtistsResponse;
+			updatePages();
+			updateStorage([
+				{ id: pageStorageID, value: page },
+				{ id: searchStorageID, value: search }
+			]);
+		}
+	};
+
+	fetchArtistsData();
+
+	const switchToPreviousPage = async () => {
+		if (page - 1 > 0) {
+			page--;
+			await fetchArtistsData();
+		}
+	};
+
+	const switchToNextPage = async () => {
+		if (page + 1 <= maxPage) {
+			page++;
+			await fetchArtistsData();
+		}
+	};
+
+	const handleClick = async (e: any) => {
+		const targetPage = e?.currentTarget?.innerText;
+		if (page !== Number(targetPage)) {
+			page = Number(targetPage);
+			await fetchArtistsData();
+		}
+	};
+
+	const handleSearchChange = async (e: any) => {
+		const newSearchValue = e.target.value;
+		if (search !== newSearchValue) {
+			search = newSearchValue;
+			page = 1;
+			await fetchArtistsData();
+		}
+	};
+	const debounceSearchChange = debounce(handleSearchChange);
 </script>
 
 <div>
-    {#if error}
-        <p>{error.error}</p>
-    {:else}
-        {JSON.stringify(artistsData)}
-    {/if}
+	{#if error}
+		<Error error={error?.error || ''} />
+	{:else}
+		<div class="search">
+			<span>
+				<Input
+					size="lg"
+					class="search-input"
+					placeholder={$_('artists.search.placeholder')}
+					value={search}
+					on:input={(e) => debounceSearchChange(e)}
+				/>
+			</span>
+		</div>
+		{#if loading}
+			<p></p>
+		{:else if artistsData}
+			{#if artistsData.total !== 0}
+				<Table>
+					<TableHead>
+						<TableHeadCell>{$_('work.artist.label')}</TableHeadCell>
+					</TableHead>
+					<TableBody>
+						{#each artistsData.artists as artist}
+							<TableBodyRow>
+								<TableBodyCell
+									><a href={`/artists/${artist.id}`}>{artist.name || $_('work.artist.fallback')}</a
+									></TableBodyCell
+								>
+							</TableBodyRow>
+						{/each}
+					</TableBody>
+				</Table>
+				<div class="pagination">
+					<Pagination
+						{pages}
+						on:previous={switchToPreviousPage}
+						on:next={switchToNextPage}
+						on:click={handleClick}
+						icon
+					>
+						<svelte:fragment slot="prev">
+							<ChevronLeftOutline class="h-2.5 w-2.5" />
+						</svelte:fragment>
+						<svelte:fragment slot="next">
+							<ChevronRightOutline class="h-2.5 w-2.5" />
+						</svelte:fragment>
+					</Pagination>
+				</div>
+			{:else}
+				{$_('artists.nodata')}
+			{/if}
+		{/if}
+	{/if}
 </div>

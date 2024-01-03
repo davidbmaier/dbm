@@ -19,7 +19,9 @@ func GetWorks(c *fiber.Ctx, env map[string]string) error {
 func GetWork(c *fiber.Ctx, env map[string]string) error {
 	id, err := c.ParamsInt("id")
 	if err != nil {
-		return c.SendStatus(400)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Bad request",
+		})
 	}
 
 	work := database.RetrieveWork(id)

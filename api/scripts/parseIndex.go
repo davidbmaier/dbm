@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/davidbmaier/dbm/types"
+	"github.com/dlclark/regexp2"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -32,16 +33,23 @@ type Entry struct {
 	source       string
 }
 
-var entryRegex = regexp.MustCompile(`^\s*(?P<workID>[^\s]+): (?P<artistName>[^:(]+[^\s(:])(?:(?: \([^\d]*(?P<birthYear>\d+)(?:,[^\d]*)?(?:-(?P<deathYear>\d+)[^\d]*)?\))?:?(?: (?P<name>[^(\.]+))?(?: \((?P<creationInfo>[^\)]+)\)(?: \(.*\))?)?\.(?: (?:(?P<materialAlt>[^\d\.]+)\.)| (?:(?P<sizeAlt>[\d,]* x [\d,]*[^\.]*)\.)| (?:(?P<material>[^\d\.]+)), (?:(?P<size>[\d,]* x [\d,]*[^\.]*))\.)?(?: (?P<owner>[^\d\.]+)\.)?(?: Q: (?P<source>.+))?)?$`)
+var entryRegex = regexp2.MustCompile(`^\s*(?P<workID>[^\s]+): (?P<artistName>[^:(]+[^\s(:])(?:(?: \([^\d]*(?P<birthYear>\d+)(?:,[^\d]*)?(?:-(?P<deathYear>\d+)[^\d]*)?\))?:?(?: (?P<name>[^(\.]+(?:\((?!o\.[DJ]\.)[^\d]+\))?))?(?: \((?P<creationInfo>[^\)]*\d+[^\)]*|o\.D\.|o\.J\.)\)(?: \(.*\))?)?\.(?: (?:(?P<materialAlt>[^\d\.]+)\.)| (?:(?P<sizeAlt>[^\d,\.]*[\d,]* x [\d,]*[^\.]*)\.)| (?:(?P<material>[^\d\.]+)), (?:(?P<size>[^\d\.]*[\d,]* x [\d,]*[^\.]*))\.)?(?: (?P<owner>[^\d\.]+)\.)?(?: Q: (?P<source>.+))?)?$`, regexp2.RE2)
 var env map[string]string
 
-func findNamedMatches(regex *regexp.Regexp, str string) map[string]string {
-	match := regex.FindStringSubmatch(str)
+func findNamedMatches(regex *regexp2.Regexp, str string) map[string]string {
+	match, err := regex.FindStringMatch(str)
+	check(err)
 
 	results := map[string]string{}
-	for i, name := range match {
-		results[regex.SubexpNames()[i]] = name
+	if match != nil {
+		groups := match.Groups()
+		for _, group := range groups {
+			if group.Name != "0" {
+				results[group.Name] = group.String()
+			}
+		}
 	}
+
 	return results
 }
 
@@ -99,7 +107,8 @@ func main() {
 				entry.material = matches["material"]
 			}
 			if matches["size"] != "" {
-				entry.size = matches["size"]
+				cleanSize := strings.Replace(matches["size"], "x", "×", -1)
+				entry.size = cleanSize
 			}
 			if matches["sizeAlt"] != "" && matches["materialAlt"] != "" {
 				entry.size = matches["sizeAlt"]

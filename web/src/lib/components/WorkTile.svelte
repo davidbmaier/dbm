@@ -10,10 +10,10 @@
 <span class="worktile-card">
 	<Card img={getFileLink(work)} href={`/works/${work.id}`}>
 		<Heading tag="h6">
-			{work.name || $_('worktile.name.fallback')}
+			{work.name || $_('work.name.fallback')}
 		</Heading>
 		<p>
-			{work.artist.name || $_('worktile.artist.fallback')}
+			{work.artist.name || $_('work.artist.fallback')}
 		</p>
 	</Card>
 </span>

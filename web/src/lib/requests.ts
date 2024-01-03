@@ -1,6 +1,13 @@
 import { PUBLIC_API_URL } from '$env/static/public';
 import { goto } from '$app/navigation';
-import type { ArtistsResponse, ErrorResponse, ParsedResponse, WorksResponse } from '../types';
+import type {
+	Artist,
+	ArtistsResponse,
+	ErrorResponse,
+	ParsedResponse,
+	Work,
+	WorksResponse
+} from '../types';
 
 const sendRequest = async (
 	url: string,
@@ -56,11 +63,37 @@ export const getArtists = async (
 	}
 };
 
-export const getWorks = async (search = '', page = 1): Promise<WorksResponse | ErrorResponse> => {
-	const response = await sendRequest(`${PUBLIC_API_URL}/api/works?page=${page}&search=${search}`);
+export const getArtist = async (id: number): Promise<Artist | ErrorResponse> => {
+	const response = await sendRequest(`${PUBLIC_API_URL}/api/artists/${id}`);
+	if (isErrorResponse(response.parsedBody)) {
+		return response.parsedBody as ErrorResponse;
+	} else {
+		return response.parsedBody as Artist;
+	}
+};
+
+export const getWorks = async (
+	search = '',
+	page = 1,
+	artistID?: number
+): Promise<WorksResponse | ErrorResponse> => {
+	let url = `${PUBLIC_API_URL}/api/works?page=${page}&search=${search}`;
+	if (artistID) {
+		url += `&artistID=${artistID}`;
+	}
+	const response = await sendRequest(url);
 	if (isErrorResponse(response.parsedBody)) {
 		return response.parsedBody as ErrorResponse;
 	} else {
 		return response.parsedBody as WorksResponse;
+	}
+};
+
+export const getWork = async (id: number): Promise<Work | ErrorResponse> => {
+	const response = await sendRequest(`${PUBLIC_API_URL}/api/works/${id}`);
+	if (isErrorResponse(response.parsedBody)) {
+		return response.parsedBody as ErrorResponse;
+	} else {
+		return response.parsedBody as Work;
 	}
 };
