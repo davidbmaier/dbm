@@ -131,3 +131,8 @@ dist
 
 # go debug files
 __debug*
+
+# project-specific files and directories
+dbm
+files/
+pkg/
