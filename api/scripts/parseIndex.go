@@ -33,7 +33,7 @@ type Entry struct {
 	source       string
 }
 
-var entryRegex = regexp2.MustCompile(`^\s*(?P<workID>[^\s]+): (?P<artistName>[^:(]+[^\s(:])(?:(?: \([^\d]*(?P<birthYear>\d+)(?:,[^\d]*)?(?:-(?P<deathYear>\d+)[^\d]*)?\))?:?(?: (?P<name>[^(\.]+(?:\((?!o\.[DJ]\.)[^\d]+\))?))?(?: \((?P<creationInfo>[^\)]*\d+[^\)]*|o\.D\.|o\.J\.)\)(?: \(.*\))?)?\.(?: (?:(?P<materialAlt>[^\d\.]+)\.)| (?:(?P<sizeAlt>[^\d,\.]*[\d,]* x [\d,]*[^\.]*)\.)| (?:(?P<material>[^\d\.]+)), (?:(?P<size>[^\d\.]*[\d,]* x [\d,]*[^\.]*))\.)?(?: (?P<owner>[^\d\.]+)\.)?(?: Q: (?P<source>.+))?)?$`, regexp2.RE2)
+var entryRegex = regexp2.MustCompile(`^\s*(?P<workID>[^\s]+): (?P<artistName>[^:(]+[^\s(:])(?:(?: \([^\d]*(?P<birthYear>\d+)(?:,[^\d]*)?(?:-(?P<deathYear>\d+)[^\d]*)?\))?:?(?: (?P<name>[^(\.]+(?:\((?!o\.[DJ]\.)[^\d]+\))?))?(?: \((?P<creationInfo>[^\)]*\d+[^\)]*|o\.D\.|o\.J\.)\)(?: \(.*\))?)?\.(?: (?:(?P<materialAlt>[^\d\.]+)\.)| (?:(?P<sizeAlt>[^\d,\.]*[\d,]* x [\d,]*[^\.]*)\.)| (?:(?P<material>[^\d\.]+)), (?:(?P<size>[^\d\.]*[\d,]* x [\d,]*[^\.]*))\.)?(?: (?P<owner>[^\d\.]+)\.?)?(?: Q: (?P<source>.+))?)?$`, regexp2.RE2)
 var env map[string]string
 
 func findNamedMatches(regex *regexp2.Regexp, str string) map[string]string {
@@ -72,12 +72,21 @@ func main() {
 	lastWorkIDName := ""
 	for _, line := range lines {
 		matches := findNamedMatches(entryRegex, line)
+
+		numberWorkIDRegex := regexp.MustCompile(`^\s*\d+[a-z]`)
 		if len(matches) == 0 {
 			errorLines = append(errorLines, line)
+
+			// if line is not empty and the workID is not just a sub-entry (whitespace + number + letter), update the lastWorkIDName for future potential sub-entries
+			if len(line) > 0 && !numberWorkIDRegex.Match([]byte(line)) {
+				line = strings.Replace(line, "’", "'", -1) // replace different apostrophes in IDs
+				lastWorkIDName = regexp.MustCompile(`^[^\d:]+`).FindString(line)
+			}
 		} else {
 			entry := Entry{}
 
-			numberWorkIDRegex := regexp.MustCompile(`^\d+[a-z]$`)
+			matches["workID"] = strings.Replace(matches["workID"], "’", "'", -1) // replace different apostrophes in IDs
+
 			if numberWorkIDRegex.MatchString(matches["workID"]) {
 				entry.workID = lastWorkIDName + matches["workID"]
 			} else {
@@ -157,3 +166,4 @@ func handleParsedEntry(entry Entry, db *gorm.DB) {
 }
 
 // TODO: go through artist names and deduplicate - current progress: Salvador Dalí
+// TODO: go through duplicate workIDs as logged by the script's output
