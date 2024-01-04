@@ -41,13 +41,13 @@
 			{#if artistData.birthYear}
 				<span class="details-entry">
 					<Label>{$_('artist.birthYear.label')}</Label>
-					<p>{artistData.birthYear}</p>
+					<p class="text-gray-900 dark:text-gray-300">{artistData.birthYear}</p>
 				</span>
 			{/if}
 			{#if artistData.deathYear}
 				<span class="details-entry">
 					<Label>{$_('artist.deathYear.label')}</Label>
-					<p>{artistData.deathYear}</p>
+					<p class="text-gray-900 dark:text-gray-300">{artistData.deathYear}</p>
 				</span>
 			{/if}
 		</div>
@@ -59,7 +59,11 @@
 					searchStorageID={`artist${data.id}WorksSearch`}
 				/>
 			</TabItem>
-			<TabItem title={$_('artist.biography.label')}>{$_('comingSoon.label')}</TabItem>
+			<TabItem title={$_('artist.biography.label')}>
+				<p id="artist-biography" class="text-gray-900 dark:text-gray-300">
+					{$_('comingSoon.label')}
+				</p>
+			</TabItem>
 		</Tabs>
 	{/if}
 </div>
@@ -73,5 +77,8 @@
 		flex-direction: column;
 		justify-content: center;
 		margin-bottom: 20px;
+	}
+	#artist-biography {
+		margin: 20px 50px;
 	}
 </style>

@@ -7,6 +7,7 @@
 	import { getStorage, updateStorage, type storageEntry, debounce } from '$lib/util';
 	import { _ } from 'svelte-i18n';
 	import Error from './Error.svelte';
+	import Notification from './Notification.svelte';
 
 	export let pageStorageID = ``;
 	export let searchStorageID = ``;
@@ -149,7 +150,9 @@
 					</Pagination>
 				</div>
 			{:else}
-				{$_('works.nodata')}
+				<div id="tile-grid-notification">
+					<Notification message={$_('works.nodata')} />
+				</div>
 			{/if}
 		{/if}
 	{/if}
@@ -159,7 +162,6 @@
 	.tile-grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-		margin: 20px 50px;
 	}
 	.tile-grid :global(.worktile-card) {
 		justify-self: center;
@@ -181,5 +183,11 @@
 		.tile-grid {
 			grid-template-columns: 1fr;
 		}
+	}
+
+	#tile-grid-notification {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 </style>

@@ -15,6 +15,7 @@
 	import { debounce, getStorage, updateStorage, type storageEntry } from '$lib/util';
 	import { ChevronLeftOutline, ChevronRightOutline } from 'flowbite-svelte-icons';
 	import Error from '$lib/components/Error.svelte';
+	import Notification from '$lib/components/Notification.svelte';
 
 	const pageStorageID = `artistsPage`;
 	const searchStorageID = `artistsSearch`;
@@ -172,7 +173,9 @@
 					</Pagination>
 				</div>
 			{:else}
-				{$_('artists.nodata')}
+				<div id="artists-notification">
+					<Notification message={$_('artists.nodata')} />
+				</div>
 			{/if}
 		{/if}
 	{/if}
@@ -204,5 +207,11 @@
 		#artists-table :global(thead th:last-child) {
 			max-width: 100px;
 		}
+	}
+
+	#artists-notification {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 </style>

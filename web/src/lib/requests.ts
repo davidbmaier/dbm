@@ -1,4 +1,6 @@
 import { PUBLIC_API_URL } from '$env/static/public';
+import { _ } from 'svelte-i18n';
+import { get } from 'svelte/store';
 import { goto } from '$app/navigation';
 import type {
 	Artist,
@@ -13,33 +15,39 @@ const sendRequest = async (
 	url: string,
 	method = `GET`,
 	body: object | null = null
-): Promise<ParsedResponse> => {
-	const options: RequestInit = {
-		method: method,
-		credentials: 'include'
-	};
-	if (body) {
-		options.body = JSON.stringify(body);
-		options.headers = {
-			'Content-Type': 'application/json'
+): Promise<ParsedResponse | { parsedBody: { error: string } }> => {
+	try {
+		const options: RequestInit = {
+			method: method,
+			credentials: 'include'
+		};
+		if (body) {
+			options.body = JSON.stringify(body);
+			options.headers = {
+				'Content-Type': 'application/json'
+			};
+		}
+		const response = (await fetch(url, options)) as ParsedResponse;
+
+		if (response.headers.get('Content-Type') === `application/json`) {
+			response.parsedBody = { ...(await response.json()), status: response.status };
+		}
+
+		if (response.status === 401 || response.status === 403) {
+			console.log('Authorization failed, redirecting to login');
+			goto('/');
+		}
+
+		return response;
+	} catch (error) {
+		return {
+			parsedBody: { error: get(_)('error.networkError') }
 		};
 	}
-	const response = (await fetch(url, options)) as ParsedResponse;
-
-	if (response.headers.get('Content-Type') === `application/json`) {
-		response.parsedBody = { ...(await response.json()), status: response.status };
-	}
-
-	if (response.status === 401 || response.status === 403) {
-		console.log('Authorization failed, redirecting to login');
-		goto('/');
-	}
-
-	return response;
 };
 
 export const isErrorResponse = (input: object): input is ErrorResponse => {
-	return (input as ErrorResponse).error !== undefined;
+	return (input as ErrorResponse)?.error !== undefined;
 };
 
 export const login = async (user: string, password: string) => {

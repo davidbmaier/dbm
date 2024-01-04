@@ -1,5 +1,5 @@
 <script>
-	import { Input, Button } from 'flowbite-svelte';
+	import { Input, Button, Label } from 'flowbite-svelte';
 	import { _ } from 'svelte-i18n';
 	import { login } from '$lib/requests';
 	import Error from '$lib/components/Error.svelte';
@@ -15,15 +15,15 @@
 </script>
 
 <section id="login-wrapper">
-	<div>
-		{$_('login.user')}
+	<div class="login-element">
+		<Label>{$_('login.user')}</Label>
 		<Input bind:value={user} />
 	</div>
-	<div>
-		{$_('login.password')}
+	<div class="login-element">
+		<Label>{$_('login.password')}</Label>
 		<Input type="password" bind:value={password} />
 	</div>
-	<div id="login-button">
+	<div class="login-element">
 		<Button on:click={performLogin}>{$_('login.login')}</Button>
 		{#if error}
 			<div id="login-error">
@@ -39,7 +39,7 @@
 		margin: auto;
 		margin-top: 150px;
 	}
-	#login-button {
+	.login-element {
 		margin-top: 10px;
 	}
 	#login-error {

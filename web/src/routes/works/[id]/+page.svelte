@@ -59,31 +59,31 @@
 				{#if workData.creationInfo}
 					<span class="details-entry">
 						<Label>{$_('work.creationInfo.label')}</Label>
-						<p>{workData.creationInfo}</p>
+						<p class="text-gray-900 dark:text-gray-300">{workData.creationInfo}</p>
 					</span>
 				{/if}
 				{#if workData.material}
 					<span class="details-entry">
 						<Label>{$_('work.material.label')}</Label>
-						<p>{workData.material}</p>
+						<p class="text-gray-900 dark:text-gray-300">{workData.material}</p>
 					</span>
 				{/if}
 				{#if workData.size}
 					<span class="details-entry">
 						<Label>{$_('work.size.label')}</Label>
-						<p>{workData.size}</p>
+						<p class="text-gray-900 dark:text-gray-300">{workData.size}</p>
 					</span>
 				{/if}
 				{#if workData.owner}
 					<span class="details-entry">
 						<Label>{$_('work.owner.label')}</Label>
-						<p>{workData.owner}</p>
+						<p class="text-gray-900 dark:text-gray-300">{workData.owner}</p>
 					</span>
 				{/if}
 				{#if workData.source}
 					<span class="details-entry">
 						<Label>{$_('work.source.label')}</Label>
-						<p>{workData.source}</p>
+						<p class="text-gray-900 dark:text-gray-300">{workData.source}</p>
 					</span>
 				{/if}
 			</div>

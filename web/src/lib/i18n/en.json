@@ -7,6 +7,7 @@
 	"artists.search.placeholder": "Search for an artist...",
 	"comingSoon.label": "Coming soon...",
 	"error.label": "Something went wrong: ",
+	"error.networkError": "Couldn't reach the server",
 	"layout.artists.label": "Artists",
 	"layout.title": "Database Maier",
 	"layout.works.label": "Artworks",

@@ -7,6 +7,7 @@
 	"artists.search.placeholder": "Suche nach einer Künstlerin/einem Künstler...",
 	"comingSoon.label": "Bald verfügbar...",
 	"error.label": "Ein Fehler ist aufgetreten: ",
+	"error.networkError": "Server konnte nicht erreicht werden",
 	"layout.artists.label": "Künstlerinnen und Künstler",
 	"layout.title": "Datenbank Maier",
 	"layout.works.label": "Kunstwerke",
