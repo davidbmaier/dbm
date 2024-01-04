@@ -34,7 +34,7 @@
 
 	const updatePages = () => {
 		if (worksData.works.length > 0) {
-			maxPage = worksData.total / worksData.works.length;
+			maxPage = Math.ceil(worksData.total / worksData.works.length);
 
 			const tempPages = [];
 			if (page - 2 > 0) {
@@ -175,17 +175,11 @@
 		.tile-grid {
 			grid-template-columns: 1fr 1fr;
 		}
-		:global(.search-input) {
-			width: 400px;
-		}
 	}
 
 	@media (max-width: 720px) {
 		.tile-grid {
 			grid-template-columns: 1fr;
-		}
-		:global(.search-input) {
-			width: 300px;
 		}
 	}
 </style>

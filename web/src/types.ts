@@ -12,6 +12,7 @@ export type Artist = {
 	name: string;
 	birthYear: number;
 	deathYear: number;
+	numberOfWorks: number;
 };
 
 export type ArtistsResponse = {

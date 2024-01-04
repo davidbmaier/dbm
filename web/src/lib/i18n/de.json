@@ -3,6 +3,7 @@
 	"artist.birthYear.label": "Geburtsjahr",
 	"artist.deathYear.label": "Todesjahr",
 	"artists.nodata": "Keine Künstlerinnen oder Künstler gefunden...",
+	"artists.numberOfWorks.label": "Anzahl der Kunstwerke",
 	"artists.search.placeholder": "Suche nach einer Künstlerin/einem Künstler",
 	"comingSoon.label": "Bald verfügbar...",
 	"error.label": "Ein Fehler ist aufgetreten: ",

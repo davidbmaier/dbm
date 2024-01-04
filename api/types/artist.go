@@ -7,7 +7,12 @@ type Artist struct {
 	DeathYear *int   `json:"deathYear"`
 }
 
+type ArtistWithNumberOfWorks struct {
+	Artist
+	NumberOfWorks int `json:"numberOfWorks"`
+}
+
 type ArtistsResponse struct {
-	Artists []Artist `json:"artists"`
-	Total   int64    `json:"total"`
+	Artists []ArtistWithNumberOfWorks `json:"artists"`
+	Total   int64                     `json:"total"`
 }

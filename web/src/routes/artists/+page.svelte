@@ -133,21 +133,28 @@
 			<p></p>
 		{:else if artistsData}
 			{#if artistsData.total !== 0}
-				<Table>
-					<TableHead>
-						<TableHeadCell>{$_('work.artist.label')}</TableHeadCell>
-					</TableHead>
-					<TableBody>
-						{#each artistsData.artists as artist}
-							<TableBodyRow>
-								<TableBodyCell
-									><a href={`/artists/${artist.id}`}>{artist.name || $_('work.artist.fallback')}</a
-									></TableBodyCell
-								>
-							</TableBodyRow>
-						{/each}
-					</TableBody>
-				</Table>
+				<div id="artists-table">
+					<Table>
+						<TableHead>
+							<TableHeadCell>{$_('work.artist.label')}</TableHeadCell>
+							<TableHeadCell>{$_('artists.numberOfWorks.label')}</TableHeadCell>
+						</TableHead>
+						<TableBody>
+							{#each artistsData.artists as artist}
+								<TableBodyRow>
+									<TableBodyCell>
+										<a href={`/artists/${artist.id}`}>
+											{artist.name || $_('work.artist.fallback')}
+										</a>
+									</TableBodyCell>
+									<TableBodyCell>
+										{artist.numberOfWorks}
+									</TableBodyCell>
+								</TableBodyRow>
+							{/each}
+						</TableBody>
+					</Table>
+				</div>
 				<div class="pagination">
 					<Pagination
 						{pages}
@@ -170,3 +177,32 @@
 		{/if}
 	{/if}
 </div>
+
+<style>
+	#artists-table {
+		max-width: 1000px;
+		margin: auto;
+	}
+
+	#artists-table > :global(div) {
+		overflow-x: hidden !important;
+	}
+
+	#artists-table :global(td) {
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+
+	@media (max-width: 500px) {
+		#artists-table :global(tr td:first-child) {
+			max-width: 180px;
+		}
+		#artists-table :global(tr td:last-child) {
+			max-width: 100px;
+		}
+
+		#artists-table :global(thead th:last-child) {
+			max-width: 100px;
+		}
+	}
+</style>

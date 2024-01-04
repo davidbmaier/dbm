@@ -32,20 +32,23 @@ func RetrieveArtists(search string, page int) types.ArtistsResponse {
 	pageSize := 20
 	offset := (page - 1) * pageSize
 
-	var artists []types.Artist
+	var artists []types.ArtistWithNumberOfWorks
 	var totalArtistsCount int64
-	db.Order("ID").Where("name ILIKE ?", "%"+search+"%").Limit(pageSize).Offset(offset).Find(&artists)
+
+	// get artists for search and page + NumberOfWorks (from a join with works)
+	// this uses a superset of the Artist type so the NumberOfWorks field doesn't actually get stored in the database
+	db.Model(&types.Artist{}).Order("ID").Select("artists.*, count(works.artist_id) as number_of_works").Joins("left join works on works.artist_id = artists.id").Group("artists.id").Where("artists.name ILIKE ?", "%"+search+"%").Limit(pageSize).Offset(offset).Find(&artists)
 	db.Model(&types.Artist{}).Where("name ILIKE ?", "%"+search+"%").Count(&totalArtistsCount)
 
 	return types.ArtistsResponse{
-		Artists: []types.Artist(artists),
+		Artists: []types.ArtistWithNumberOfWorks(artists),
 		Total:   totalArtistsCount,
 	}
 }
 
-func RetrieveArtist(artistID int) types.Artist {
-	var artist types.Artist
-	db.First(&artist, artistID)
+func RetrieveArtist(artistID int) types.ArtistWithNumberOfWorks {
+	var artist types.ArtistWithNumberOfWorks
+	db.Model(&types.Artist{}).Select("artists.*, count(works.artist_id) as number_of_works").Joins("left join works on works.artist_id = artists.id").Group("artists.id").First(&artist, artistID)
 
 	return artist
 }

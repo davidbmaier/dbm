@@ -37,6 +37,12 @@
 		height: calc(100% - 72px);
 		padding: 20px 50px;
 	}
+	@media (max-width: 500px) {
+		#content-wrapper {
+			padding: 20px 20px;
+		}
+	}
+
 	:global(.nav-active) {
 		font-weight: bold;
 	}
