@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"log"
 
@@ -74,5 +75,23 @@ func main() {
 	filesRouter := app.Group("/files")
 	filesRouter.Get("/:workID", func(c *fiber.Ctx) error { return routes.GetFile(c, env) })
 
-	app.Listen(fmt.Sprintf(":%s", env["PORT"]))
+	if env["DEPLOY_MODE"] == "prod" {
+		// create tls certificate
+		cer, err := tls.LoadX509KeyPair(env["CERT_PATH"], env["KEY_PATH"])
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		config := &tls.Config{Certificates: []tls.Certificate{cer}}
+		// create custom listener
+		ln, err := tls.Listen("tcp", fmt.Sprintf(":%s", env["PORT"]), config)
+		if err != nil {
+			panic(err)
+		}
+
+		app.Listener(ln)
+	} else {
+		app.Listen(fmt.Sprintf(":%s", env["PORT"]))
+	}
+
 }
