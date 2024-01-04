@@ -21,7 +21,7 @@ func Login(c *fiber.Ctx, env map[string]string) error {
 	}
 
 	// Throws Unauthorized error
-	if payload.User != env["ADMIN_USER"] || payload.Password != env["ADMIN_PASS"] {
+	if !(payload.User == env["ADMIN_USER"] && payload.Password == env["ADMIN_PASS"]) && !(payload.User == env["GUEST_USER"] && payload.Password == env["GUEST_PASS"]) {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Unauthorized",
 		})
@@ -29,9 +29,7 @@ func Login(c *fiber.Ctx, env map[string]string) error {
 
 	// Create the Claims
 	claims := jwt.MapClaims{
-		"name":  "Admin",
-		"admin": true,
-		"exp":   time.Now().Add(time.Hour * 72).Unix(),
+		"exp": time.Now().Add(time.Hour * 72).Unix(),
 	}
 
 	// Create token
