@@ -27,13 +27,19 @@ func GetFile(c *fiber.Ctx, env map[string]string) error {
 		firstCharacter = 'U'
 	}
 
-	path := env["FILES_PATH"] + "/" + string(firstCharacter) + "/" + decodedWorkID + ".jpg"
-
-	_, err = os.Open(path)
-	if err != nil {
-		return c.SendStatus(fiber.StatusNotFound)
+	possiblePaths := []string{
+		env["FILES_PATH"] + "/" + string(firstCharacter) + "/" + decodedWorkID + ".jpg",
+		env["FILES_PATH"] + "/" + string(firstCharacter) + "/" + decodedWorkID + ".JPG",
 	}
 
-	c.Set("Cache-Control", "max-age=604800")
-	return c.SendFile(path)
+	for _, path := range possiblePaths {
+		_, err = os.Open(path)
+		if err == nil {
+			c.Set("Cache-Control", "max-age=604800")
+			return c.SendFile(path)
+		}
+	}
+
+	// return 404 if we haven't found a valid path
+	return c.SendStatus(fiber.StatusNotFound)
 }
