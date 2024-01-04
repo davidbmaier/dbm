@@ -3,11 +3,11 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"log"
 
 	database "github.com/davidbmaier/dbm/db"
 	"github.com/davidbmaier/dbm/routes"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
@@ -76,6 +76,7 @@ func main() {
 	filesRouter.Get("/:workID", func(c *fiber.Ctx) error { return routes.GetFile(c, env) })
 
 	if env["DEPLOY_MODE"] == "prod" {
+		log.Info("Starting in production mode")
 		// create tls certificate
 		cer, err := tls.LoadX509KeyPair(env["CERT_PATH"], env["KEY_PATH"])
 		if err != nil {
@@ -91,6 +92,7 @@ func main() {
 
 		app.Listener(ln)
 	} else {
+		log.Info("Starting in development mode")
 		app.Listen(fmt.Sprintf(":%s", env["PORT"]))
 	}
 
