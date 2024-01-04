@@ -14,19 +14,35 @@
 	};
 </script>
 
-<div>
-	{$_('login.email')}
-	<Input bind:value={email} />
-</div>
-<div>
-	{$_('login.password')}
-	<Input bind:value={password} />
-</div>
-<div>
-	<Button on:click={performLogin}>{$_('login.login')}</Button>
-</div>
-{#if error}
+<section id="login-wrapper">
 	<div>
-		<Error error={error || ''} />
+		{$_('login.email')}
+		<Input bind:value={email} />
 	</div>
-{/if}
+	<div>
+		{$_('login.password')}
+		<Input bind:value={password} />
+	</div>
+	<div id="login-button">
+		<Button on:click={performLogin}>{$_('login.login')}</Button>
+		{#if error}
+			<div id="login-error">
+				<Error error={error == 'Unauthorized' ? $_('login.unauthorized.error') : error} />
+			</div>
+		{/if}
+	</div>
+</section>
+
+<style>
+	#login-wrapper {
+		max-width: 500px;
+		margin: auto;
+		margin-top: 50px;
+	}
+	#login-button {
+		margin-top: 10px;
+	}
+	#login-error {
+		margin-top: 10px;
+	}
+</style>
