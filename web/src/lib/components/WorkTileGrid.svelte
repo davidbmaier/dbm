@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { getWorks, isErrorResponse } from '$lib/requests';
-	import { Pagination, Input } from 'flowbite-svelte';
+	import { Pagination } from 'flowbite-svelte';
 	import { ChevronLeftOutline, ChevronRightOutline } from 'flowbite-svelte-icons';
 	import type { WorksResponse, ErrorResponse } from '../../types';
 	import WorkTile from '$lib/components/WorkTile.svelte';
-	import { getStorage, updateStorage, type storageEntry, debounce } from '$lib/util';
+	import { getStorage, updateStorage, type storageEntry } from '$lib/util';
 	import { _ } from 'svelte-i18n';
 	import Error from './Error.svelte';
 	import Notification from './Notification.svelte';
+	import SearchInput from './SearchInput.svelte';
 
 	export let pageStorageID = ``;
 	export let searchStorageID = ``;
@@ -99,31 +100,20 @@
 	};
 
 	const handleSearchChange = async (e: any) => {
-		const newSearchValue = e.target.value;
+		const newSearchValue = e.detail;
 		if (search !== newSearchValue) {
 			search = newSearchValue;
 			page = 1;
 			await fetchWorksData();
 		}
 	};
-	const debounceSearchChange = debounce(handleSearchChange);
 </script>
 
 <div>
 	{#if error}
 		<Error error={error?.error || ''} />
 	{:else}
-		<div class="search">
-			<span>
-				<Input
-					size="lg"
-					class="search-input"
-					placeholder={$_('works.search.placeholder')}
-					value={search}
-					on:input={(e) => debounceSearchChange(e)}
-				/>
-			</span>
-		</div>
+		<SearchInput on:search={handleSearchChange} placeholder={$_('works.search.placeholder')} />
 		{#if loading}
 			<p></p>
 		{:else if worksData}

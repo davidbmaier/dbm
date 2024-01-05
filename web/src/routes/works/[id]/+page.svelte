@@ -39,6 +39,7 @@
 				<a href={getFileLink(workData)} target="_blank">
 					<img
 						id="work-image"
+						class="image-shadow"
 						src={getFileLink(workData)}
 						alt={$_('work.altMessage', {
 							values: { name: workData.name, artist: workData.artist.name }
@@ -112,11 +113,16 @@
 	#work-image {
 		max-height: 80vh;
 	}
+	.image-shadow {
+		box-shadow:
+			rgba(82, 82, 118, 0.25) 0px 50px 100px -20px,
+			rgba(125, 125, 125, 0.3) 0px 30px 60px -30px;
+	}
 
 	#work-details {
 		flex: 1;
-		padding-left: 20px;
-		padding-right: 20px;
+		padding-left: 40px;
+		padding-right: 40px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;

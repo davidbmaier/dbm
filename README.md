@@ -40,10 +40,6 @@ Monorepo for both front- and backend for the **D**ata**b**ase **M**aier project.
 
 ## TODO
 
-- hold users in db
-- improve styling for work pages
-- improve styling for work tiles (better hover states with some small animations for the image)
-- add reset button to search input
 - smooth loading of images
 - add footer
 - clean up database entries (see script TODO comments)

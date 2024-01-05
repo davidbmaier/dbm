@@ -16,6 +16,7 @@
 	import { ChevronLeftOutline, ChevronRightOutline } from 'flowbite-svelte-icons';
 	import Error from '$lib/components/Error.svelte';
 	import Notification from '$lib/components/Notification.svelte';
+	import SearchInput from '$lib/components/SearchInput.svelte';
 
 	const pageStorageID = `artistsPage`;
 	const searchStorageID = `artistsSearch`;
@@ -105,31 +106,20 @@
 	};
 
 	const handleSearchChange = async (e: any) => {
-		const newSearchValue = e.target.value;
+		const newSearchValue = e.detail;
 		if (search !== newSearchValue) {
 			search = newSearchValue;
 			page = 1;
 			await fetchArtistsData();
 		}
 	};
-	const debounceSearchChange = debounce(handleSearchChange);
 </script>
 
 <div>
 	{#if error}
 		<Error error={error?.error || ''} />
 	{:else}
-		<div class="search">
-			<span>
-				<Input
-					size="lg"
-					class="search-input"
-					placeholder={$_('artists.search.placeholder')}
-					value={search}
-					on:input={(e) => debounceSearchChange(e)}
-				/>
-			</span>
-		</div>
+		<SearchInput on:search={handleSearchChange} placeholder={$_('artists.search.placeholder')} />
 		{#if loading}
 			<p></p>
 		{:else if artistsData}

@@ -22,6 +22,7 @@
 	"login.login": "Einloggen",
 	"login.password": "Passwort",
 	"login.unauthorized.error": "Login fehlgeschlagen",
+	"search.reset.title": "Suche zurücksetzen",
 	"work.altMessage": "Abbildung des Kunstwerks \"{name}\" von {artist}",
 	"work.artist.fallback": "Unbekannt",
 	"work.artist.label": "Künstler/in",
