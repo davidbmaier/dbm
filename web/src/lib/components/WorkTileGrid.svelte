@@ -113,7 +113,11 @@
 	{#if error}
 		<Error error={error?.error || ''} />
 	{:else}
-		<SearchInput on:search={handleSearchChange} placeholder={$_('works.search.placeholder')} />
+		<SearchInput
+			on:search={handleSearchChange}
+			{search}
+			placeholder={$_('works.search.placeholder')}
+		/>
 		{#if loading}
 			<p></p>
 		{:else if worksData}

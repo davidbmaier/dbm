@@ -7,7 +7,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	let search = '';
+	export let search = '';
 
 	export let placeholder = '';
 

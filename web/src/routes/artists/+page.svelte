@@ -119,7 +119,11 @@
 	{#if error}
 		<Error error={error?.error || ''} />
 	{:else}
-		<SearchInput on:search={handleSearchChange} placeholder={$_('artists.search.placeholder')} />
+		<SearchInput
+			on:search={handleSearchChange}
+			{search}
+			placeholder={$_('artists.search.placeholder')}
+		/>
 		{#if loading}
 			<p></p>
 		{:else if artistsData}
