@@ -40,8 +40,7 @@ Monorepo for both front- and backend for the **D**ata**b**ase **M**aier project.
 
 ## TODO
 
-- identify works with missing files and fix them/remove them from the database
-- extend works search to cover artist names
+- hold users in db
 - improve styling for work pages
 - improve styling for work tiles (better hover states with some small animations for the image)
 - add reset button to search input
@@ -49,7 +48,8 @@ Monorepo for both front- and backend for the **D**ata**b**ase **M**aier project.
 - add footer
 - clean up database entries (see script TODO comments)
 - add backend sorting support for works and artists
-- add more filters for works and artists
+- add more filters for works and artists (e.g. extend works search to filter by artist name)
 - make header sticky
 - logout button
 - add health check on login page to immediately redirect to /works if already logged in
+- add more types of data (image descriptions, exhibitions, articles, etc.)

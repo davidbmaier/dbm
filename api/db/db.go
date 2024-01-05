@@ -22,6 +22,7 @@ func InitDatabaseConnection(envMap map[string]string) *gorm.DB {
 		}
 		db.AutoMigrate(&types.Artist{})
 		db.AutoMigrate(&types.Work{})
+		db.AutoMigrate(&types.User{})
 	}
 
 	log.Info("Database connection established")
@@ -37,7 +38,15 @@ func RetrieveArtists(search string, page int) types.ArtistsResponse {
 
 	// get artists for search and page + NumberOfWorks (from a join with works)
 	// this uses a superset of the Artist type so the NumberOfWorks field doesn't actually get stored in the database
-	db.Model(&types.Artist{}).Order("ID").Select("artists.*, count(works.artist_id) as number_of_works").Joins("left join works on works.artist_id = artists.id").Group("artists.id").Where("artists.name ILIKE ?", "%"+search+"%").Limit(pageSize).Offset(offset).Find(&artists)
+	db.Model(&types.Artist{}).Order("ID").Select(
+		"artists.*, count(works.artist_id) as number_of_works",
+	).Joins(
+		"left join works on works.artist_id = artists.id",
+	).Group(
+		"artists.id",
+	).Where(
+		"artists.name ILIKE ?", "%"+search+"%",
+	).Limit(pageSize).Offset(offset).Find(&artists)
 	db.Model(&types.Artist{}).Where("name ILIKE ?", "%"+search+"%").Count(&totalArtistsCount)
 
 	return types.ArtistsResponse{
@@ -48,7 +57,11 @@ func RetrieveArtists(search string, page int) types.ArtistsResponse {
 
 func RetrieveArtist(artistID int) types.ArtistWithNumberOfWorks {
 	var artist types.ArtistWithNumberOfWorks
-	db.Model(&types.Artist{}).Select("artists.*, count(works.artist_id) as number_of_works").Joins("left join works on works.artist_id = artists.id").Group("artists.id").First(&artist, artistID)
+	db.Model(&types.Artist{}).Select(
+		"artists.*, count(works.artist_id) as number_of_works",
+	).Joins(
+		"left join works on works.artist_id = artists.id",
+	).Group("artists.id").First(&artist, artistID)
 
 	return artist
 }
@@ -62,11 +75,25 @@ func RetrieveWorks(search string, artistID int, page int) types.WorksResponse {
 
 	// get all works if artistID is 0 (unset)
 	if artistID != 0 {
-		db.Preload("Artist").Order("ID").Where("artist_id = ?", artistID).Where("name ILIKE ?", "%"+search+"%").Limit(pageSize).Offset(offset).Find(&works)
-		db.Model(&types.Work{}).Preload("Artist").Where("artist_id = ?", artistID).Where("name ILIKE ?", "%"+search+"%").Count(&totalWorksCount)
+		db.Preload("Artist").Order("ID").Where(
+			"artist_id = ?", artistID,
+		).Where(
+			"name ILIKE ?", "%"+search+"%",
+		).Limit(pageSize).Offset(offset).Find(&works)
+
+		db.Model(&types.Work{}).Preload("Artist").Where(
+			"artist_id = ?", artistID,
+		).Where(
+			"name ILIKE ?", "%"+search+"%",
+		).Count(&totalWorksCount)
 	} else {
-		db.Preload("Artist").Order("ID").Where("name ILIKE ?", "%"+search+"%").Limit(pageSize).Offset(offset).Find(&works)
-		db.Model(&types.Work{}).Preload("Artist").Where("name ILIKE ?", "%"+search+"%").Count(&totalWorksCount)
+		db.Preload("Artist").Order("ID").Where(
+			"name ILIKE ?", "%"+search+"%",
+		).Limit(pageSize).Offset(offset).Find(&works)
+
+		db.Model(&types.Work{}).Preload("Artist").Where(
+			"name ILIKE ?", "%"+search+"%",
+		).Count(&totalWorksCount)
 	}
 
 	return types.WorksResponse{
@@ -80,4 +107,21 @@ func RetrieveWork(workID int) types.Work {
 	db.Preload("Artist").First(&work, workID)
 
 	return work
+}
+
+func CreateUser(user types.User) {
+	db.Create(&user)
+}
+
+func UpdateUserPassword(user types.User) {
+	db.Model(&types.User{}).Where("username = ?", user.Username).Update("hashed_password", user.HashedPassword)
+}
+
+func RetrieveUser(username string) types.User {
+	var user types.User
+	db.Where(
+		"username = ?", username,
+	).First(&user)
+
+	return user
 }

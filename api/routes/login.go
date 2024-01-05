@@ -3,14 +3,16 @@ package routes
 import (
 	"time"
 
+	database "github.com/davidbmaier/dbm/db"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Login(c *fiber.Ctx, env map[string]string) error {
 	payload := struct {
-		User     string `json:"user"`
+		Username string `json:"username"`
 		Password string `json:"password"`
 	}{}
 
@@ -20,8 +22,16 @@ func Login(c *fiber.Ctx, env map[string]string) error {
 		})
 	}
 
-	// Throws Unauthorized error
-	if !(payload.User == env["ADMIN_USER"] && payload.Password == env["ADMIN_PASS"]) && !(payload.User == env["GUEST_USER"] && payload.Password == env["GUEST_PASS"]) {
+	user := database.RetrieveUser(payload.Username)
+
+	if user.ID == 0 {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Unauthorized",
+		})
+	}
+
+	err := bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), []byte(payload.Password))
+	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Unauthorized",
 		})
@@ -29,7 +39,10 @@ func Login(c *fiber.Ctx, env map[string]string) error {
 
 	// Create the Claims
 	claims := jwt.MapClaims{
-		"exp": time.Now().Add(time.Hour * 72).Unix(),
+		"admin":    user.Admin,
+		"id":       user.ID,
+		"username": user.Username,
+		"exp":      time.Now().Add(time.Hour * 72).Unix(),
 	}
 
 	// Create token

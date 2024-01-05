@@ -72,6 +72,10 @@ func main() {
 	artistsRouter.Get("/", func(c *fiber.Ctx) error { return routes.GetArtists(c, env) })
 	artistsRouter.Get("/:id", func(c *fiber.Ctx) error { return routes.GetArtist(c, env) })
 
+	usersRouter := apiRouter.Group("/users")
+	usersRouter.Post("/", func(c *fiber.Ctx) error { return routes.CreateUser(c, env) })
+	usersRouter.Patch("/", func(c *fiber.Ctx) error { return routes.UpdateUserPassword(c, env) })
+
 	filesRouter := app.Group("/files")
 	filesRouter.Get("/:workID", func(c *fiber.Ctx) error { return routes.GetFile(c, env) })
 
