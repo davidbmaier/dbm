@@ -51,11 +51,21 @@ export const isErrorResponse = (input: object): input is ErrorResponse => {
 };
 
 export const login = async (user: string, password: string) => {
-	const response = await sendRequest(`${PUBLIC_API_URL}/api/login`, 'POST', { user, password });
+	const response = await sendRequest(`${PUBLIC_API_URL}/api/login`, 'POST', {
+		username: user,
+		password
+	});
 	if (isErrorResponse(response.parsedBody)) {
 		return response.parsedBody as ErrorResponse;
 	} else {
 		goto('/works');
+	}
+};
+
+export const updatePassword = async (password: string) => {
+	const response = await sendRequest(`${PUBLIC_API_URL}/api/users`, 'PATCH', { password });
+	if (isErrorResponse(response.parsedBody)) {
+		return response.parsedBody as ErrorResponse;
 	}
 };
 

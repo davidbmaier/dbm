@@ -62,6 +62,18 @@ func UpdateUserPassword(c *fiber.Ctx, env map[string]string) error {
 		})
 	}
 
+	if len([]byte(payload.Password)) > 72 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Bad request, password too long",
+		})
+	}
+
+	if len(payload.Password) < 8 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Bad request, password too short",
+		})
+	}
+
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(payload.Password), 10)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
