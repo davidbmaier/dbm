@@ -165,5 +165,5 @@ func handleParsedEntry(entry Entry, db *gorm.DB) {
 	db.Create(&work)
 }
 
-// TODO: go through artist names and deduplicate - current progress: Salvador Dalí
 // TODO: go through duplicate workIDs as logged by the script's output
+// TODO: go through artists with the same birth and death year (excluding 0s) to find potential duplicates
