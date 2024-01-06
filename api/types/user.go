@@ -1,7 +1,7 @@
 package types
 
 type User struct {
-	ID             uint
+	ID             *uint
 	Username       string `gorm:"uniqueIndex"`
 	HashedPassword string
 	Admin          bool

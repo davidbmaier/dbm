@@ -24,7 +24,7 @@ func Login(c *fiber.Ctx, env map[string]string) error {
 
 	user := database.RetrieveUser(payload.Username)
 
-	if user.ID == 0 {
+	if user.ID == nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Unauthorized",
 		})
