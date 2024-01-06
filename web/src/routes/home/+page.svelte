@@ -15,8 +15,8 @@
 		works = worksData.total;
 		const artistsData = (await getArtists('', 1)) as ArtistsResponse;
 		artists = artistsData.total;
-		randomWork = Math.floor(Math.random() * works);
-		randomArtist = Math.floor(Math.random() * artists);
+		randomWork = Math.ceil(Math.random() * works);
+		randomArtist = Math.ceil(Math.random() * artists);
 	};
 
 	getData();
