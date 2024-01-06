@@ -66,3 +66,13 @@ func Login(c *fiber.Ctx, env map[string]string) error {
 	c.Set("Set-Cookie", cookieHeader)
 	return c.JSON(fiber.Map{"token": t})
 }
+
+func Logout(c *fiber.Ctx, env map[string]string) error {
+	cookieHeader := "token=deleted; HttpOnly; Max-Age=-1; Path=/"
+	if env["DEPLOY_MODE"] == "prod" {
+		// only add Secure to cookie if this is production
+		cookieHeader = cookieHeader + "; Secure"
+	}
+	c.Set("Set-Cookie", cookieHeader)
+	return c.SendStatus(200)
+}

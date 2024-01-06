@@ -45,7 +45,6 @@ Monorepo for both front- and backend for the **D**ata**b**ase **M**aier project.
 - add artist/artwork of the day for the home page
 - clean up database entries (see script TODO comments)
 - make header sticky
-- logout button
 - add health check on login page to immediately redirect to /works if already logged in
 - add more types of data (image descriptions, exhibitions, articles, etc.)
 - timeline on artist page (birth year - death year with works in the middle)

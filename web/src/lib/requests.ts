@@ -62,6 +62,11 @@ export const login = async (user: string, password: string) => {
 	}
 };
 
+export const logout = async () => {
+	await sendRequest(`${PUBLIC_API_URL}/api/logout`, 'POST');
+	goto('/');
+};
+
 export const updatePassword = async (password: string) => {
 	const response = await sendRequest(`${PUBLIC_API_URL}/api/users`, 'PATCH', { password });
 	if (isErrorResponse(response.parsedBody)) {

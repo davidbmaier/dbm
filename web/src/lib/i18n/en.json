@@ -1,4 +1,5 @@
 {
+	"account.logout.title": "Log out",
 	"account.newPassword.label": "New password",
 	"account.passwordError.tooLong": "The password is too long",
 	"account.passwordError.tooShort": "The password has to be 8 characters or longer",
@@ -26,6 +27,7 @@
 	"home.welcome.title": "Welcome to Datenbank Maier!",
 	"layout.artists.label": "Artists",
 	"layout.title": "Datenbank Maier",
+	"layout.title.short": "DBM",
 	"layout.works.label": "Artworks",
 	"login.login": "Log in",
 	"login.password": "Password",

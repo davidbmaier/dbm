@@ -51,6 +51,7 @@ func main() {
 	apiRouter := app.Group("/api")
 	// Login route
 	apiRouter.Post("/login", func(c *fiber.Ctx) error { return routes.Login(c, env) })
+	apiRouter.Post("/logout", func(c *fiber.Ctx) error { return routes.Logout(c, env) })
 
 	// JWT Middleware
 	app.Use(jwtware.New(jwtware.Config{

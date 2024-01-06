@@ -21,7 +21,15 @@
 	</div>
 	<div class="login-element">
 		<Label>{$_('login.password')}</Label>
-		<Input type="password" bind:value={password} />
+		<Input
+			type="password"
+			bind:value={password}
+			on:keydown={(e) => {
+				if (e.key === 'Enter') {
+					performLogin();
+				}
+			}}
+		/>
 	</div>
 	<div class="login-element">
 		<Button on:click={performLogin}>{$_('login.login')}</Button>

@@ -16,7 +16,7 @@
 		Input,
 		Label
 	} from 'flowbite-svelte';
-	import { updatePassword } from '$lib/requests';
+	import { logout, updatePassword } from '$lib/requests';
 	import Error from '$lib/components/Error.svelte';
 	import { UserSettingsSolid } from 'flowbite-svelte-icons';
 	$: activeUrl = $page.url.pathname;
@@ -50,6 +50,10 @@
 			newPassword = '';
 		}
 	};
+
+	const performLogout = async () => {
+		logout();
+	};
 </script>
 
 <div id="wrapper">
@@ -57,11 +61,21 @@
 		<Navbar>
 			<NavBrand href={activeUrl === '/' ? '/' : '/home'}>
 				<img src="/favicon.png" class="me-3 h-6 sm:h-9" alt="" />
-				<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+				<span
+					id="full-title"
+					class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
+				>
 					{$_('layout.title')}
+				</span>
+				<span
+					id="short-title"
+					class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
+				>
+					{$_('layout.title.short')}
 				</span>
 			</NavBrand>
 			<div class="flex md:order-2">
+				<DarkMode title={$_('darkMode.title')} />
 				{#if activeUrl != '/' && !$page.error?.message}
 					<Button
 						on:click={() => (modalOpened = true)}
@@ -70,9 +84,32 @@
 					>
 						<UserSettingsSolid />
 					</Button>
+					<Button
+						on:click={performLogout}
+						title={$_('account.logout.title')}
+						class="settings-button rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+					>
+						<!-- inline SVG for easy class application -->
+						<svg
+							class="h-5 w-5 text-gray-500 dark:text-gray-400"
+							aria-hidden="true"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 16 16"
+						>
+							<path
+								stroke="currentColor"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M4 8h11m0 0-4-4m4 4-4 4m-5 3H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h3"
+							/>
+						</svg>
+					</Button>
 				{/if}
-				<DarkMode title={$_('darkMode.title')} />
-				<NavHamburger />
+				{#if activeUrl != '/'}
+					<NavHamburger />
+				{/if}
 			</div>
 			<NavUl {activeUrl} activeClass="nav-active">
 				{#if activeUrl != '/' && !$page.error?.message}
@@ -114,8 +151,17 @@
 		padding: 20px 50px;
 	}
 	@media (max-width: 500px) {
+		#full-title {
+			display: none;
+		}
+
 		#content-wrapper {
 			padding: 20px 20px;
+		}
+	}
+	@media (min-width: 501px) {
+		#short-title {
+			display: none;
 		}
 	}
 
@@ -125,6 +171,6 @@
 
 	:global(.settings-button) {
 		background-color: transparent;
-		margin-right: 5px;
+		margin-left: 5px;
 	}
 </style>
