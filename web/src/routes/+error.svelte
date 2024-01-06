@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Error from '$lib/components/Error.svelte';
 </script>
 
-<h1>{$page.error?.message}</h1>
+<Error error={$page.error?.message} />

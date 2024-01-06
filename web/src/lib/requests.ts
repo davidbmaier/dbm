@@ -58,7 +58,7 @@ export const login = async (user: string, password: string) => {
 	if (isErrorResponse(response.parsedBody)) {
 		return response.parsedBody as ErrorResponse;
 	} else {
-		goto('/works');
+		goto('/home');
 	}
 };
 

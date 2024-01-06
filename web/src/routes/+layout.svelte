@@ -55,14 +55,14 @@
 <div id="wrapper">
 	{#if !$isLoading}
 		<Navbar>
-			<NavBrand href="/works">
+			<NavBrand href={activeUrl === '/' ? '/' : '/home'}>
 				<img src="/favicon.png" class="me-3 h-6 sm:h-9" alt="" />
 				<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
 					{$_('layout.title')}
 				</span>
 			</NavBrand>
 			<div class="flex md:order-2">
-				{#if activeUrl != '/'}
+				{#if activeUrl != '/' && !$page.error?.message}
 					<Button
 						on:click={() => (modalOpened = true)}
 						title={$_('account.settings.title')}
@@ -75,7 +75,7 @@
 				<NavHamburger />
 			</div>
 			<NavUl {activeUrl} activeClass="nav-active">
-				{#if activeUrl != '/'}
+				{#if activeUrl != '/' && !$page.error?.message}
 					<NavLi href="/works">{$_('layout.works.label')}</NavLi>
 					<NavLi href="/artists">{$_('layout.artists.label')}</NavLi>
 				{/if}

@@ -26,7 +26,7 @@
 
 <style>
 	.worktile-card {
-		margin: 15px 0px;
+		margin: 20px 0px;
 		width: 300px;
 		overflow: hidden;
 	}
