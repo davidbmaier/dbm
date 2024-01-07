@@ -4,6 +4,8 @@ Monorepo for both front- and backend for the **D**ata**b**ase **M**aier project.
 
 The production site is private, but I thought I'd publish the code anyway.
 
+This project is based on a private digital art collection, the website is effectively just a way to look through the data.
+
 ## Frontend
 
 - Svelte/SvelteKit
