@@ -17,6 +17,11 @@ This project is based on a private digital art collection, the website is effect
 - Postgres for structured data storage
 - image files are stored on disk
 
+## Screenshots
+
+![image](https://github.com/davidbmaier/dbm/assets/17618532/275463fa-0cb7-4c3c-b2b9-341439ffe9ac)
+![image](https://github.com/davidbmaier/dbm/assets/17618532/50ba9177-9ac7-4ea2-b14a-230826f65445)
+
 ## TODO
 
 - pagination improvements (changeable page size, first/last buttons, label for how many total there are and which ones are currently shown, double)
