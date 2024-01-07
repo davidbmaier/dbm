@@ -17,7 +17,14 @@
 <section id="login-wrapper">
 	<div class="login-element">
 		<Label>{$_('login.user')}</Label>
-		<Input bind:value={user} />
+		<Input
+			bind:value={user}
+			on:keydown={(e) => {
+				if (e.key === 'Enter') {
+					performLogin();
+				}
+			}}
+		/>
 	</div>
 	<div class="login-element">
 		<Label>{$_('login.password')}</Label>
