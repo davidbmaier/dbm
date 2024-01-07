@@ -33,6 +33,7 @@
 		search = storedValues[searchStorageID];
 	}
 
+	let pageSize = 20;
 	let pages = [{ name: '1' }];
 	let maxPage = 1;
 	let loading = true;
@@ -42,7 +43,7 @@
 
 	const updatePages = () => {
 		if (artistsData.artists.length > 0) {
-			maxPage = artistsData.total / artistsData.artists.length;
+			maxPage = artistsData.total / pageSize;
 
 			const tempPages = [];
 			if (page - 2 > 0) {
