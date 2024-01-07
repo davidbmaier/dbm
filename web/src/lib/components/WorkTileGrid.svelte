@@ -27,6 +27,7 @@
 		search = storedValues[searchStorageID] || '';
 	}
 
+	let pageSize = 20;
 	let pages = [{ name: '1' }];
 	let maxPage = 1;
 	let loading = true;
@@ -36,7 +37,7 @@
 
 	const updatePages = () => {
 		if (worksData.works.length > 0) {
-			maxPage = Math.ceil(worksData.total / worksData.works.length);
+			maxPage = Math.ceil(worksData.total / pageSize);
 
 			const tempPages = [];
 			if (page - 2 > 0) {

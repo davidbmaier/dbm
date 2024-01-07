@@ -10,14 +10,14 @@
 <span class="worktile-card">
 	<Card href={`/works/${work.id}`}>
 		<div class="worktile-card-image-wrapper rounded-lg">
-			<img src={getFileLink(work)} alt="" />
+			<img src={getFileLink(work)} alt="" loading="lazy" />
 		</div>
 
 		<div class="worktile-card-text">
 			<Heading tag="h6">
 				{work.name || $_('work.name.fallback')}
 			</Heading>
-			<p>
+			<p class="text-gray-900 dark:text-white">
 				{work.artist.name || $_('work.artist.fallback')}
 			</p>
 		</div>

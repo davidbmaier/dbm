@@ -2,6 +2,8 @@
 
 Monorepo for both front- and backend for the **D**ata**b**ase **M**aier project.
 
+The production site is private, but I thought I'd publish the code anyway.
+
 ## Frontend
 
 - Svelte/SvelteKit
@@ -11,7 +13,7 @@ Monorepo for both front- and backend for the **D**ata**b**ase **M**aier project.
 
 - Go web server
 - Postgres for structured data storage
-- images are stored on disk
+- image files are stored on disk
 
 ## Data structure
 
@@ -40,6 +42,9 @@ Monorepo for both front- and backend for the **D**ata**b**ase **M**aier project.
 
 ## TODO
 
+- pagination improvements (changeable page size, first/last buttons, label for how many total there are and which ones are currently shown, double)
+- use placeholders for WorkTiles to prevent scroll position getting lost
+- change the page title to reflect where you are
 - add backend sorting support for works and artists
 - add more filters for works and artists (e.g. extend works search to filter by artist name)
 - add artist/artwork of the day for the home page
