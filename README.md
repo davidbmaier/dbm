@@ -30,6 +30,7 @@ This project is based on a private digital art collection, the website is effect
 - add backend sorting support for works and artists
 - add more filters for works and artists (e.g. extend works search to filter by artist name)
 - add artist/artwork of the day for the home page
+- identify duplicates and show them as one artwork with different images
 - clean up database entries (see script TODO comments)
 - make header sticky
 - add health check on login page to immediately redirect to /works if already logged in
