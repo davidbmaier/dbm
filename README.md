@@ -27,13 +27,15 @@ This project is based on a private digital art collection, the website is effect
 - pagination improvements (changeable page size, first/last buttons, label for how many total there are and which ones are currently shown, double)
 - use placeholders for WorkTiles to prevent scroll position getting lost
 - change the page title to reflect where you are
+- figure out a proper token strategy for renewing (maybe just write new JWT on request when expiry is soon?)
 - add backend sorting support for works and artists
 - add more filters for works and artists (e.g. extend works search to filter by artist name)
 - add artist/artwork of the day for the home page
+- add discovery mode (possibly as a replacement for the random buttons) which adds random buttons to work and artist pages
 - identify duplicates and show them as one artwork with different images
 - clean up database entries (see script TODO comments)
 - global search bar in the header (with different result types)?
 - make header sticky
-- add health check on login page to immediately redirect to /works if already logged in
+- add check on login page to immediately redirect to /works if already logged in
 - add more types of data (image descriptions, exhibitions, articles, etc.)
 - timeline on artist page (birth year - death year with works in the middle)
