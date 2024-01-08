@@ -32,6 +32,7 @@ This project is based on a private digital art collection, the website is effect
 - add artist/artwork of the day for the home page
 - identify duplicates and show them as one artwork with different images
 - clean up database entries (see script TODO comments)
+- global search bar in the header (with different result types)?
 - make header sticky
 - add health check on login page to immediately redirect to /works if already logged in
 - add more types of data (image descriptions, exhibitions, articles, etc.)
