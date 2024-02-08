@@ -33,6 +33,8 @@
 	"login.password": "Password",
 	"login.unauthorized.error": "Login failed",
 	"login.user": "Username",
+	"pagination.itemsPerPage.label": "items per page",
+	"pagination.of.label": "of",
 	"search.reset.title": "Reset search",
 	"work.altMessage": "Image of the artwork \"{name}\" by {artist}",
 	"work.artist.fallback": "Unknown artist",

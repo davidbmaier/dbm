@@ -24,7 +24,6 @@ This project is based on a private digital art collection, the website is effect
 
 ## TODO
 
-- pagination improvements (changeable page size, first/last buttons, label for how many total there are and which ones are currently shown, double)
 - use placeholders for WorkTiles to prevent scroll position getting lost
 - change the page title to reflect where you are
 - figure out a proper token strategy for renewing (maybe just write new JWT on request when expiry is soon?)

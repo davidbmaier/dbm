@@ -33,6 +33,8 @@
 	"login.password": "Passwort",
 	"login.unauthorized.error": "Login fehlgeschlagen",
 	"login.user": "Benutzername",
+	"pagination.itemsPerPage.label": "Objekte pro Seite",
+	"pagination.of.label": "von",
 	"search.reset.title": "Suche zurücksetzen",
 	"work.altMessage": "Abbildung des Kunstwerks \"{name}\" von {artist}",
 	"work.artist.fallback": "Unbekannt",

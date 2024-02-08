@@ -3,5 +3,9 @@
 </script>
 
 <div>
-	<WorkTileGrid pageStorageID="worksPage" searchStorageID="worksSearch" />
+	<WorkTileGrid
+		pageStorageID="worksPage"
+		pageSizeStorageID="worksPageSize"
+		searchStorageID="worksSearch"
+	/>
 </div>

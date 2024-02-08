@@ -8,8 +8,17 @@ import (
 func GetArtists(c *fiber.Ctx, env map[string]string) error {
 	search := c.Query("search")
 	page := c.QueryInt("page")
+	pageSize := c.QueryInt("pageSize")
 
-	artists := database.RetrieveArtists(search, page)
+	if pageSize == 0 {
+		pageSize = 20 // default size
+	} else if pageSize < 10 {
+		pageSize = 10
+	} else if pageSize > 50 {
+		pageSize = 50
+	}
+
+	artists := database.RetrieveArtists(search, page, pageSize)
 
 	c.Set("Content-Type", "application/json")
 	return c.JSON(artists)

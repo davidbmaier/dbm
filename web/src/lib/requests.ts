@@ -76,9 +76,12 @@ export const updatePassword = async (password: string) => {
 
 export const getArtists = async (
 	search = '',
-	page = 1
+	page = 1,
+	pageSize = 20
 ): Promise<ArtistsResponse | ErrorResponse> => {
-	const response = await sendRequest(`${PUBLIC_API_URL}/api/artists?page=${page}&search=${search}`);
+	const response = await sendRequest(
+		`${PUBLIC_API_URL}/api/artists?page=${page}&pageSize=${pageSize}&search=${search}`
+	);
 	if (isErrorResponse(response.parsedBody)) {
 		return response.parsedBody as ErrorResponse;
 	} else {
@@ -98,9 +101,10 @@ export const getArtist = async (id: number): Promise<Artist | ErrorResponse> => 
 export const getWorks = async (
 	search = '',
 	page = 1,
+	pageSize = 20,
 	artistID?: number
 ): Promise<WorksResponse | ErrorResponse> => {
-	let url = `${PUBLIC_API_URL}/api/works?page=${page}&search=${search}`;
+	let url = `${PUBLIC_API_URL}/api/works?page=${page}&pageSize=${pageSize}&search=${search}`;
 	if (artistID) {
 		url += `&artistID=${artistID}`;
 	}

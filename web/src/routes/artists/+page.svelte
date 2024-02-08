@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { getArtists, isErrorResponse } from '$lib/requests';
 	import {
-		Input,
-		Pagination,
 		Table,
 		TableBody,
 		TableBodyCell,
@@ -12,28 +10,36 @@
 	} from 'flowbite-svelte';
 	import type { ArtistsResponse, ErrorResponse } from '../../types';
 	import { _ } from 'svelte-i18n';
-	import { debounce, getStorage, updateStorage, type storageEntry } from '$lib/util';
-	import { ChevronLeftOutline, ChevronRightOutline } from 'flowbite-svelte-icons';
+	import { getStorage, updateStorage, type storageEntry } from '$lib/util';
 	import Error from '$lib/components/Error.svelte';
 	import Notification from '$lib/components/Notification.svelte';
 	import SearchInput from '$lib/components/SearchInput.svelte';
+	import Pagination from '$lib/components/Pagination.svelte';
 
 	const pageStorageID = `artistsPage`;
+	const pageSizeStorageID = `artistsPageSize`;
 	const searchStorageID = `artistsSearch`;
 
-	export let page = 1;
-	export let search = '';
+	let page = 1;
+	let search = '';
+	let pageSize = 20;
 
 	// get values from last visit
-	const storedValues: storageEntry = getStorage([pageStorageID, searchStorageID]);
+	const storedValues: storageEntry = getStorage([
+		pageStorageID,
+		pageSizeStorageID,
+		searchStorageID
+	]);
 	if (storedValues[pageStorageID]) {
 		page = Number(storedValues[pageStorageID]);
+	}
+	if (storedValues[pageSizeStorageID]) {
+		pageSize = Number(storedValues[pageSizeStorageID]);
 	}
 	if (storedValues[searchStorageID]) {
 		search = storedValues[searchStorageID];
 	}
 
-	let pageSize = 20;
 	let pages = [{ name: '1' }];
 	let maxPage = 1;
 	let loading = true;
@@ -43,9 +49,13 @@
 
 	const updatePages = () => {
 		if (artistsData.artists.length > 0) {
-			maxPage = artistsData.total / pageSize;
+			maxPage = Math.ceil(artistsData.total / pageSize);
 
 			const tempPages = [];
+			// first page
+			if (page - 1 >= 3) {
+				tempPages.push({ name: `1` });
+			}
 			if (page - 2 > 0) {
 				tempPages.push({ name: `${Number(page) - 2}` });
 			}
@@ -59,6 +69,10 @@
 			if (page + 2 <= maxPage) {
 				tempPages.push({ name: `${Number(page) + 2}` });
 			}
+			// last page
+			if (maxPage - page >= 2) {
+				tempPages.push({ name: `${maxPage}` });
+			}
 			pages = tempPages;
 		} else {
 			page = 1;
@@ -68,7 +82,7 @@
 
 	const fetchArtistsData = async () => {
 		loading = true;
-		const fetchedData = await getArtists(search, page);
+		const fetchedData = await getArtists(search, page, pageSize);
 		loading = false;
 		if (isErrorResponse(fetchedData)) {
 			error = fetchedData;
@@ -77,6 +91,7 @@
 			updatePages();
 			updateStorage([
 				{ id: pageStorageID, value: page },
+				{ id: pageSizeStorageID, value: pageSize },
 				{ id: searchStorageID, value: search }
 			]);
 		}
@@ -114,6 +129,14 @@
 			await fetchArtistsData();
 		}
 	};
+
+	const handlePageSizeChange = async (newSize: number) => {
+		if (pageSize !== newSize) {
+			pageSize = newSize;
+			page = 1;
+			await fetchArtistsData();
+		}
+	};
 </script>
 
 <div>
@@ -129,6 +152,17 @@
 			<p></p>
 		{:else if artistsData}
 			{#if artistsData.total !== 0}
+				<Pagination
+					{pages}
+					{switchToNextPage}
+					{switchToPreviousPage}
+					{handleClick}
+					startEntry={pageSize * (page - 1) + 1}
+					endEntry={pageSize * (page - 1) + artistsData.artists.length}
+					totalEntries={artistsData.total}
+					{pageSize}
+					{handlePageSizeChange}
+				/>
 				<div id="artists-table">
 					<Table>
 						<TableHead>
@@ -151,22 +185,18 @@
 						</TableBody>
 					</Table>
 				</div>
-				<div class="pagination">
-					<Pagination
-						{pages}
-						on:previous={switchToPreviousPage}
-						on:next={switchToNextPage}
-						on:click={handleClick}
-						icon
-					>
-						<svelte:fragment slot="prev">
-							<ChevronLeftOutline class="h-2.5 w-2.5" />
-						</svelte:fragment>
-						<svelte:fragment slot="next">
-							<ChevronRightOutline class="h-2.5 w-2.5" />
-						</svelte:fragment>
-					</Pagination>
-				</div>
+				<Pagination
+					{pages}
+					{switchToNextPage}
+					{switchToPreviousPage}
+					{handleClick}
+					startEntry={pageSize * (page - 1) + 1}
+					endEntry={pageSize * (page - 1) + artistsData.artists.length}
+					totalEntries={artistsData.total}
+					{pageSize}
+					{handlePageSizeChange}
+					bottom
+				/>
 			{:else}
 				<div id="artists-notification">
 					<Notification message={$_('artists.nodata')} />
@@ -180,6 +210,7 @@
 	#artists-table {
 		max-width: 1000px;
 		margin: auto;
+		margin-top: 20px;
 	}
 
 	#artists-table > :global(div) {

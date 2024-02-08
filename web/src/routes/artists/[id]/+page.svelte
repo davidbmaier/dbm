@@ -56,6 +56,7 @@
 				<WorkTileGrid
 					artistID={data.id}
 					pageStorageID={`artist${data.id}WorksPage`}
+					pageSizeStorageID={`artist${data.id}WorksPageSize`}
 					searchStorageID={`artist${data.id}WorksSearch`}
 				/>
 			</TabItem>
