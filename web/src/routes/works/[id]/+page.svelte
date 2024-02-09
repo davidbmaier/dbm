@@ -4,7 +4,7 @@
 	import { _ } from 'svelte-i18n';
 	import type { PageData } from './$types';
 	import { Heading, Label } from 'flowbite-svelte';
-	import { getFileLink } from '$lib/util';
+	import { getFileLink, getTitle } from '$lib/util';
 	import Error from '$lib/components/Error.svelte';
 
 	export let data: PageData;
@@ -28,6 +28,9 @@
 	fetchWorkData();
 </script>
 
+<svelte:head>
+	<title>{getTitle(`${workData?.name} (${workData?.artist?.name})`)}</title>
+</svelte:head>
 <div id="work-wrapper">
 	{#if error}
 		<Error error={error?.error || ''} />

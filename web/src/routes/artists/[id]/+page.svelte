@@ -6,6 +6,7 @@
 	import { Heading, Label, TabItem, Tabs } from 'flowbite-svelte';
 	import WorkTileGrid from '$lib/components/WorkTileGrid.svelte';
 	import Error from '$lib/components/Error.svelte';
+	import { getTitle } from '$lib/util';
 
 	export let data: PageData;
 
@@ -28,6 +29,9 @@
 	fetchArtistData();
 </script>
 
+<svelte:head>
+	<title>{getTitle(artistData?.name)}</title>
+</svelte:head>
 <div id="work-wrapper">
 	{#if error}
 		<Error error={error?.error || ''} />

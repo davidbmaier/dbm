@@ -4,6 +4,7 @@
 	import { ArrowRightOutline, SearchSolid } from 'flowbite-svelte-icons';
 	import { _ } from 'svelte-i18n';
 	import type { ArtistsResponse, WorksResponse } from '../../types';
+	import { getTitle } from '$lib/util';
 
 	let works = 0;
 	let artists = 0;
@@ -22,6 +23,9 @@
 	getData();
 </script>
 
+<svelte:head>
+	<title>{$_('title.home')}</title>
+</svelte:head>
 {#if works !== 0 && artists !== 0}
 	<div id="home-wrapper">
 		<Heading tag="h3" class="home-heading home-heading-title">{$_('home.welcome.title')}</Heading>

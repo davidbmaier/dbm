@@ -10,7 +10,7 @@
 	} from 'flowbite-svelte';
 	import type { ArtistsResponse, ErrorResponse } from '../../types';
 	import { _ } from 'svelte-i18n';
-	import { getStorage, updateStorage, type storageEntry } from '$lib/util';
+	import { getStorage, updateStorage, type storageEntry, getTitle } from '$lib/util';
 	import Error from '$lib/components/Error.svelte';
 	import Notification from '$lib/components/Notification.svelte';
 	import SearchInput from '$lib/components/SearchInput.svelte';
@@ -139,6 +139,9 @@
 	};
 </script>
 
+<svelte:head>
+	<title>{getTitle($_('title.artists'))}</title>
+</svelte:head>
 <div>
 	{#if error}
 		<Error error={error?.error || ''} />

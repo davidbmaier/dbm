@@ -34,3 +34,7 @@ export const debounce = <Params extends unknown[]>(
 		}, timeout);
 	};
 };
+
+export const getTitle = (titleContent: string) => {
+	return titleContent ? `${titleContent} - DBM` : ``;
+};
