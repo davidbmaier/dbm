@@ -24,12 +24,12 @@ This project is based on a private digital art collection, the website is effect
 
 ## TODO
 
-- figure out a proper token strategy for renewing (maybe just write new JWT on request when expiry is soon?)
 - add backend sorting support for works and artists
 - add more filters for works and artists (e.g. extend works search to filter by artist name)
 - add artist/artwork of the day for the home page
 - add discovery mode (possibly as a replacement for the random buttons) which adds random buttons to work and artist pages
 - identify duplicates and show them as one artwork with different images
+- figure out a proper token strategy for renewing (maybe just write new JWT on request when expiry is soon?)
 - clean up database entries (see script TODO comments)
 - use placeholders for WorkTiles to prevent scroll position getting lost
 - global search bar in the header (with different result types)?

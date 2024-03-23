@@ -65,7 +65,7 @@
 				tempPages.push({ name: `${Number(page) + 2}` });
 			}
 			// last page
-			if (maxPage - page >= 2) {
+			if (maxPage - page > 2) {
 				tempPages.push({ name: `${maxPage}` });
 			}
 			pages = tempPages;
